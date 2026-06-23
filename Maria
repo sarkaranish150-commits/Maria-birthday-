@@ -1,0 +1,1064 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Maria! 💖</title>
+    <!-- Google Fonts: Pacifico for playful handwritten look, Quicksand for sweet sans-serif -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS for modern design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pastelPink: {
+                            50: '#FFF5F6',
+                            100: '#FFEBEF',
+                            200: '#FFCCD5',
+                            300: '#FFA4B4',
+                            400: '#FF708B',
+                            500: '#FF476C',
+                            600: '#E0244C',
+                        },
+                        girlyLilac: '#E8D3FF',
+                        girlyPeach: '#FFE5D9',
+                        cuteMint: '#D8F3DC',
+                    },
+                    fontFamily: {
+                        pacifico: ['Pacifico', 'cursive'],
+                        quicksand: ['Quicksand', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: #FFF5F6;
+            overflow-x: hidden;
+            background-image: radial-gradient(#ffe3e8 1.5px, transparent 1.5px), radial-gradient(#ffe3e8 1.5px, #FFF5F6 1.5px);
+            background-size: 40px 40px;
+            background-position: 0 0, 20px 20px;
+        }
+
+        /* Float animation for decorative elements */
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(3deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        @keyframes float-reverse {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(12px) rotate(-3deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        @keyframes pulse-soft {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .animate-float-1 { animation: float 6s ease-in-out infinite; }
+        .animate-float-2 { animation: float-reverse 7s ease-in-out infinite; }
+        .animate-float-3 { animation: float 5s ease-in-out infinite 1s; }
+        .animate-pulse-soft { animation: pulse-soft 3s ease-in-out infinite; }
+
+        /* Card opening animation styling */
+        .card-container {
+            perspective: 1200px;
+        }
+        .card-inner {
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
+        }
+        .card-inner.is-open {
+            transform: rotateY(-180deg);
+        }
+        .card-front, .card-back {
+            backface-visibility: hidden;
+        }
+        .card-back {
+            transform: rotateY(180deg);
+        }
+
+        /* Sparkle cursor tail effect container */
+        .sparkle-particle {
+            position: absolute;
+            pointer-events: none;
+            background: radial-gradient(circle, #fff, rgba(255,182,193,0.8));
+            border-radius: 50%;
+            animation: sparkle-fade 0.8s linear forwards;
+        }
+        @keyframes sparkle-fade {
+            0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+        }
+
+        /* Sparkly text decoration */
+        .sparkle-text {
+            text-shadow: 0 0 10px rgba(255, 105, 180, 0.3), 0 0 20px rgba(255, 105, 180, 0.2);
+        }
+
+        /* Custom Scrollbar for girly theme */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FFF5F6;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #FFA4B4;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #FF708B;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col relative text-gray-700">
+
+    <!-- Sparkle trail layer -->
+    <div id="sparkle-container" class="fixed inset-0 pointer-events-none z-50 overflow-hidden"></div>
+    
+    <!-- Custom Celebration Confetti Canvas (Replaces canvas-confetti library completely to avoid getBoundingClientRect errors!) -->
+    <canvas id="celebration-canvas" class="fixed inset-0 pointer-events-none z-50 w-full h-full"></canvas>
+
+    <header class="sticky top-0 z-40 px-4 py-3 md:py-4">
+        <nav class="max-w-4xl mx-auto bg-white/80 backdrop-blur-md rounded-full px-6 py-3 shadow-lg border border-pastelPink-100 flex items-center justify-between">
+            <a href="#" onclick="showPage('home')" class="flex items-center space-x-2 group">
+                <span class="text-2xl animate-bounce">💖</span>
+                <span class="font-pacifico text-xl md:text-2xl text-pastelPink-500 group-hover:text-pastelPink-600 transition-colors">Maria's Day</span>
+            </a>
+            
+            <!-- Menu Links (3 sweet pages) -->
+            <div class="flex items-center space-x-1 sm:space-x-3">
+                <button onclick="showPage('home')" id="nav-home" class="nav-btn px-3 py-1.5 md:px-4 md:py-2 rounded-full font-bold text-xs md:text-sm transition-all duration-300 bg-pastelPink-400 text-white shadow-md shadow-pastelPink-200">
+                    <i class="fa-solid fa-gift mr-1"></i> Home
+                </button>
+                <button onclick="showPage('mailbox')" id="nav-mailbox" class="nav-btn px-3 py-1.5 md:px-4 md:py-2 rounded-full font-bold text-xs md:text-sm transition-all duration-300 text-pastelPink-500 hover:bg-pastelPink-50">
+                    <i class="fa-solid fa-envelope-open-text mr-1"></i> Mailbox 💌
+                </button>
+                <button onclick="showPage('cake')" id="nav-cake" class="nav-btn px-3 py-1.5 md:px-4 md:py-2 rounded-full font-bold text-xs md:text-sm transition-all duration-300 text-pastelPink-500 hover:bg-pastelPink-50">
+                    <i class="fa-solid fa-cake-candles mr-1"></i> Bake Cake
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- FLOATING DECORATIONS IN BACKGROUND -->
+    <div class="absolute top-20 left-5 md:left-20 animate-float-1 pointer-events-none text-4xl select-none opacity-80">🎈</div>
+    <div class="absolute top-40 right-5 md:right-24 animate-float-2 pointer-events-none text-4xl select-none opacity-80">🌸</div>
+    <div class="absolute bottom-20 left-8 md:left-32 animate-float-3 pointer-events-none text-5xl select-none opacity-80">✨</div>
+    <div class="absolute bottom-40 right-8 md:right-20 animate-float-1 pointer-events-none text-4xl select-none opacity-80">🧁</div>
+
+    <!-- MAIN APP CONTAINER -->
+    <main class="flex-grow max-w-6xl mx-auto w-full px-4 py-6 md:py-10 z-10 flex flex-col justify-center">
+
+        <!-- ================= PAGE 1: HOME/CARD ================= -->
+        <section id="page-home" class="page-content block">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+                <!-- Left Side: Hero Greeting -->
+                <div class="lg:col-span-5 text-center lg:text-left flex flex-col justify-center">
+                    <div class="inline-flex items-center space-x-2 bg-white/90 border border-pastelPink-100 rounded-full px-4 py-1.5 self-center lg:self-start shadow-sm mb-4 animate-pulse-soft">
+                        <span class="text-pastelPink-500">🎉</span>
+                        <span class="text-xs md:text-sm font-bold tracking-wider text-pastelPink-500 uppercase">Our Magical Day!</span>
+                    </div>
+                    <h1 class="font-pacifico text-4xl md:text-6xl text-pastelPink-500 leading-tight mb-4 sparkle-text">
+                        Happy Birthday, <br class="hidden lg:block">
+                        <span class="text-pastelPink-600 underline decoration-wavy decoration-girlyLilac">Maria!</span>
+                    </h1>
+                    <p class="text-gray-600 text-base md:text-lg mb-6 font-medium leading-relaxed max-w-md mx-auto lg:mx-0">
+                        Today is all about you! The sweetest, sparkliest, and most amazing girl. Even across the screens, you bring so much warmth and butterflies to my life. I made this magical little corner just for you! ✨
+                    </p>
+                    
+                    <!-- Synthesized Music box -->
+                    <div class="bg-white/85 border border-pastelPink-100 p-4 rounded-2xl shadow-md max-w-sm mx-auto lg:mx-0 mb-6 transition-all hover:shadow-lg">
+                        <div class="flex items-center space-x-4">
+                            <button id="music-btn" onclick="toggleChimeMelody()" class="w-12 h-12 rounded-full bg-pastelPink-500 text-white flex items-center justify-center hover:bg-pastelPink-600 shadow-md shadow-pastelPink-200 transition-transform active:scale-95">
+                                <i id="music-icon" class="fa-solid fa-play"></i>
+                            </button>
+                            <div>
+                                <h4 class="font-bold text-gray-800 text-sm">Maria's Special Chime 🎵</h4>
+                                <p id="music-status" class="text-xs text-gray-500">Tap to play your birthday song!</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CTA to other pages -->
+                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3">
+                        <button onclick="showPage('mailbox')" class="w-full sm:w-auto px-6 py-3 rounded-full bg-pastelPink-500 text-white font-bold hover:bg-pastelPink-600 transition-all shadow-md hover:shadow-lg hover:shadow-pastelPink-200 text-center flex items-center justify-center gap-2">
+                            Open Mailbox 💌
+                        </button>
+                        <button onclick="showPage('cake')" class="w-full sm:w-auto px-6 py-3 rounded-full bg-white border-2 border-pastelPink-200 text-pastelPink-500 font-bold hover:bg-pastelPink-50 transition-all text-center">
+                            Bake Her Cake! 🎂
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Right Side: The Interactive Opening Card -->
+                <div class="lg:col-span-7 flex flex-col items-center justify-center">
+                    <p class="text-sm font-bold text-pastelPink-400 mb-2 animate-bounce flex items-center gap-1">
+                        <i class="fa-solid fa-pointer"></i> Tap the card below to open it! ✨
+                    </p>
+                    
+                    <!-- 3D Card Container -->
+                    <div class="card-container w-full max-w-[340px] md:max-w-[400px] h-[450px] relative cursor-pointer" onclick="toggleCard()">
+                        <div id="birthday-card" class="card-inner w-full h-full relative duration-1000 transform">
+                            
+                            <!-- Card Front Face -->
+                            <div class="card-front absolute inset-0 bg-gradient-to-tr from-pink-100 via-pink-50 to-white border-4 border-white shadow-2xl rounded-3xl p-6 flex flex-col items-center justify-between text-center overflow-hidden z-20">
+                                <!-- Pattern decor -->
+                                <div class="absolute -top-10 -left-10 w-32 h-32 bg-pink-200 rounded-full mix-blend-multiply filter blur-xl opacity-70"></div>
+                                <div class="absolute -bottom-10 -right-10 w-32 h-32 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-70"></div>
+                                
+                                <div class="mt-4 z-10">
+                                    <span class="text-5xl">💝</span>
+                                    <h3 class="font-pacifico text-3xl text-pastelPink-500 mt-2">To Lovely Maria</h3>
+                                    <p class="text-xs text-pastelPink-400 font-bold mt-1 tracking-widest uppercase">My Beautiful Online Favorite</p>
+                                </div>
+                                
+                                <!-- Huge cute cupcake drawing / decoration -->
+                                <div class="relative w-40 h-40 flex items-center justify-center z-10 animate-float-1">
+                                    <svg viewBox="0 0 100 100" class="w-full h-full">
+                                        <!-- Frosting -->
+                                        <path d="M 25 55 Q 15 40 30 30 Q 50 15 70 30 Q 85 40 75 55 Z" fill="#FFA4B4" />
+                                        <circle cx="50" cy="22" r="8" fill="#FF476C" /> <!-- Cherry -->
+                                        <circle cx="35" cy="40" r="2.5" fill="#FFE5D9" />
+                                        <circle cx="50" cy="45" r="2.5" fill="#FFE5D9" />
+                                        <circle cx="65" cy="40" r="2.5" fill="#FFE5D9" />
+                                        <!-- Wrapper -->
+                                        <path d="M 27 55 L 73 55 L 63 85 L 37 85 Z" fill="#E8D3FF" />
+                                        <!-- Stripes on wrap -->
+                                        <line x1="43" y1="55" x2="45" y2="85" stroke="#FFF" stroke-width="2.5" />
+                                        <line x1="50" y1="55" x2="50" y2="85" stroke="#FFF" stroke-width="2.5" />
+                                        <line x1="57" y1="55" x2="55" y2="85" stroke="#FFF" stroke-width="2.5" />
+                                    </svg>
+                                    <div class="absolute inset-0 flex items-center justify-center">
+                                        <i class="fa-solid fa-sparkles text-white text-xl animate-pulse"></i>
+                                    </div>
+                                </div>
+
+                                <div class="mb-4 z-10">
+                                    <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">Handcrafted with Love</p>
+                                    <span class="text-pastelPink-500 font-pacifico text-lg flex items-center justify-center gap-1">
+                                        Open Me <i class="fa-solid fa-envelope-open-text text-sm animate-bounce"></i>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Card Inside Back Face (The Message) -->
+                            <div class="card-back absolute inset-0 bg-white border-4 border-pastelPink-200 shadow-2xl rounded-3xl p-6 flex flex-col justify-between overflow-y-auto text-left">
+                                <div class="border-b-2 border-dashed border-pastelPink-100 pb-3">
+                                    <h3 class="font-pacifico text-2xl text-pastelPink-500">My Dearest Maria,</h3>
+                                </div>
+                                <div class="my-4 text-sm text-gray-600 font-medium space-y-3 leading-relaxed">
+                                    <p>🌸 Happy Birthday to an absolute queen! Even though we connect online, the spark, laughter, and cute chats we share mean the world to me.</p>
+                                    <p>✨ Meeting you across the screens is the best luck I could ever have. Your texts always put the biggest smile on my face, and today is about celebrating you!</p>
+                                    <p>🧚‍♀️ I hope your birthday is as sweet, magical, and lovely as you are. I'm always here cheering you on and thinking of you!</p>
+                                </div>
+                                <div class="border-t-2 border-dashed border-pastelPink-100 pt-3 flex items-center justify-between">
+                                    <div>
+                                        <p class="text-xs text-gray-400">Sent with lots of love & hugs,</p>
+                                        <p class="font-pacifico text-lg text-pastelPink-600">Anie 💖</p>
+                                    </div>
+                                    <div class="text-3xl animate-pulse-soft">💌</div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ================= PAGE 2: VIRTUAL MAILBOX ================= -->
+        <section id="page-mailbox" class="page-content hidden">
+            <div class="text-center max-w-2xl mx-auto mb-10">
+                <span class="text-4xl">💌</span>
+                <h2 class="font-pacifico text-4xl text-pastelPink-500 mt-2">Maria's Sweet Postbox</h2>
+                <p class="text-gray-500 text-sm md:text-base mt-2">I wrote you three cute romantic notes! Click on any envelope to open it, and try the magical compliment generator at the bottom!</p>
+            </div>
+
+            <!-- Envelope Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 justify-items-center mb-12">
+                <!-- Letter 1 -->
+                <div onclick="openLetter(1)" class="bg-white border-2 border-dashed border-pastelPink-200 hover:border-pastelPink-400 p-6 rounded-3xl shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300 text-center cursor-pointer max-w-[280px] w-full relative overflow-hidden group">
+                    <div class="absolute -top-3 -right-3 bg-pastelPink-100 w-12 h-12 rounded-full flex items-center justify-center text-pastelPink-500 text-lg group-hover:scale-110 transition-transform">🌸</div>
+                    <div class="text-5xl my-4 text-center animate-bounce">✉️</div>
+                    <h3 class="font-pacifico text-pastelPink-500 text-xl">Across the Miles</h3>
+                    <p class="text-xs text-gray-400 mt-2">How distance brings us closer together...</p>
+                    <span class="inline-block mt-4 text-xs font-bold text-white bg-pastelPink-400 px-3 py-1 rounded-full group-hover:bg-pastelPink-500">Read Note 💖</span>
+                </div>
+
+                <!-- Letter 2 -->
+                <div onclick="openLetter(2)" class="bg-white border-2 border-dashed border-pastelPink-200 hover:border-pastelPink-400 p-6 rounded-3xl shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300 text-center cursor-pointer max-w-[280px] w-full relative overflow-hidden group">
+                    <div class="absolute -top-3 -right-3 bg-girlyLilac w-12 h-12 rounded-full flex items-center justify-center text-purple-500 text-lg group-hover:scale-110 transition-transform">✨</div>
+                    <div class="text-5xl my-4 text-center animate-bounce" style="animation-delay: 0.2s">💌</div>
+                    <h3 class="font-pacifico text-purple-400 text-xl">The Butterflies</h3>
+                    <p class="text-xs text-gray-400 mt-2">The sweet effect you have on me...</p>
+                    <span class="inline-block mt-4 text-xs font-bold text-white bg-purple-400 px-3 py-1 rounded-full group-hover:bg-purple-500">Read Note 💖</span>
+                </div>
+
+                <!-- Letter 3 -->
+                <div onclick="openLetter(3)" class="bg-white border-2 border-dashed border-pastelPink-200 hover:border-pastelPink-400 p-6 rounded-3xl shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300 text-center cursor-pointer max-w-[280px] w-full relative overflow-hidden group">
+                    <div class="absolute -top-3 -right-3 bg-girlyPeach w-12 h-12 rounded-full flex items-center justify-center text-orange-400 text-lg group-hover:scale-110 transition-transform">🍓</div>
+                    <div class="text-5xl my-4 text-center animate-bounce" style="animation-delay: 0.4s">📬</div>
+                    <h3 class="font-pacifico text-orange-400 text-xl">Our Virtual Vibe</h3>
+                    <p class="text-xs text-gray-400 mt-2">Our adorable bond and daily fun...</p>
+                    <span class="inline-block mt-4 text-xs font-bold text-white bg-orange-400 px-3 py-1 rounded-full group-hover:bg-orange-500">Read Note 💖</span>
+                </div>
+            </div>
+
+            <!-- COMPLIMENT GENERATOR BOX -->
+            <div class="max-w-xl mx-auto bg-white/95 border border-pastelPink-100 p-6 md:p-8 rounded-3xl shadow-lg relative overflow-hidden text-center">
+                <div class="absolute top-0 left-0 w-16 h-16 bg-gradient-to-br from-pastelPink-100 to-transparent rounded-br-3xl"></div>
+                <div class="absolute top-0 right-0 w-16 h-16 bg-gradient-to-bl from-girlyLilac to-transparent rounded-bl-3xl"></div>
+                
+                <h3 class="font-pacifico text-2xl text-pastelPink-500 flex items-center justify-center gap-2 mb-2">
+                    ✨ Sparkly Compliment Box ✨
+                </h3>
+                <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-6">Need a little sparkle? Click below!</p>
+                
+                <!-- Display area for Compliments -->
+                <div class="min-h-[80px] flex items-center justify-center bg-pastelPink-50/50 rounded-2xl p-4 border border-pastelPink-100 mb-6">
+                    <p id="compliment-text" class="font-medium text-gray-700 italic text-base md:text-lg">
+                        "Click the button below to generate a cute reminder of how adorable you are! 🥰"
+                    </p>
+                </div>
+
+                <button onclick="generateCuteCompliment()" class="px-8 py-3 bg-pastelPink-500 text-white font-bold rounded-full shadow-lg shadow-pastelPink-200 hover:bg-pastelPink-600 active:scale-95 transition-all flex items-center gap-2 mx-auto">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> Get a Compliment! ✨
+                </button>
+            </div>
+
+            <!-- VIRTUAL LETTER POP-UP MODALS -->
+            <!-- Letter 1 Modal -->
+            <div id="letter-modal-1" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+                <div class="bg-white border-4 border-pastelPink-200 max-w-md w-full rounded-3xl shadow-2xl p-6 text-left relative animate-pulse-soft">
+                    <button onclick="closeLetter(1)" class="absolute top-4 right-4 text-pastelPink-400 hover:text-pastelPink-600 text-xl"><i class="fa-solid fa-circle-xmark"></i></button>
+                    <div class="font-pacifico text-2xl text-pastelPink-500 border-b border-pastelPink-100 pb-2 mb-4">💌 Across the Miles...</div>
+                    <div class="text-sm text-gray-600 space-y-3 font-medium leading-relaxed">
+                        <p>Hey Maria, 🌸</p>
+                        <p>Even though there are miles of screens and physical distance between us, you have this magical way of feeling closer to me than anyone else.</p>
+                        <p>Our cute conversations, late-night jokes, and your beautiful energy always brighten up my screen and make my heart flutter. You prove that a cute connection like ours doesn't need to be in the same room to feel incredibly special. Happy Birthday, my favorite person! 💕</p>
+                        <p class="font-pacifico text-right text-pastelPink-500 text-base mt-2">— Love, Anie 🌸</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Letter 2 Modal -->
+            <div id="letter-modal-2" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+                <div class="bg-white border-4 border-purple-200 max-w-md w-full rounded-3xl shadow-2xl p-6 text-left relative animate-pulse-soft">
+                    <button onclick="closeLetter(2)" class="absolute top-4 right-4 text-purple-400 hover:text-purple-600 text-xl"><i class="fa-solid fa-circle-xmark"></i></button>
+                    <div class="font-pacifico text-2xl text-purple-500 border-b border-purple-100 pb-2 mb-4">✨ The Butterflies...</div>
+                    <div class="text-sm text-gray-600 space-y-3 font-medium leading-relaxed">
+                        <p>To my adorable Maria, 🦋</p>
+                        <p>I just wanted to confess that whenever your name pops up on my notification bar, I get those sweet, silly butterflies. You have this cute, effortless charm that absolutely captivates me.</p>
+                        <p>I hope you know how appreciated, adorable, and lovely you are. Getting to celebrate you is the highlight of my year. Enjoy every single moment of your day, sweet girl! 🥰</p>
+                        <p class="font-pacifico text-right text-purple-500 text-base mt-2">— Forever yours, Anie ✨</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Letter 3 Modal -->
+            <div id="letter-modal-3" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+                <div class="bg-white border-4 border-orange-200 max-w-md w-full rounded-3xl shadow-2xl p-6 text-left relative animate-pulse-soft">
+                    <button onclick="closeLetter(3)" class="absolute top-4 right-4 text-orange-400 hover:text-orange-600 text-xl"><i class="fa-solid fa-circle-xmark"></i></button>
+                    <div class="font-pacifico text-2xl text-orange-500 border-b border-orange-100 pb-2 mb-4">🍓 Our Virtual Vibe...</div>
+                    <div class="text-sm text-gray-600 space-y-3 font-medium leading-relaxed">
+                        <p>Hey lovely, 🧸</p>
+                        <p>Our online vibe is genuinely my favorite thing! From random sharing to cute memes, every interaction with you is like a little burst of sunshine.</p>
+                        <p>You have the kindest heart and the sparkliest personality. Thank you for being such an incredibly sweet presence in my life. Sending you a million digital birthday hugs and virtual sweets! 🧁🎂</p>
+                        <p class="font-pacifico text-right text-orange-500 text-base mt-2">— Soft hugs, Anie 🧸</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ================= PAGE 3: INTERACTIVE BAKE CAKE ================= -->
+        <section id="page-cake" class="page-content hidden">
+            <div class="text-center max-w-2xl mx-auto mb-8">
+                <span class="text-4xl">🎂</span>
+                <h2 class="font-pacifico text-4xl text-pastelPink-500 mt-2">Design Maria's Dream Cake</h2>
+                <p class="text-gray-500 text-sm md:text-base mt-2">Bake her custom birthday cake! Decorate it, light the candles, and let her "blow" them out to make her sweet wish come true! 💖</p>
+            </div>
+
+            <!-- Cake Builder Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+                <!-- Left Control Panel: Decor & Toppings -->
+                <div class="lg:col-span-4 bg-white/95 border border-pastelPink-100 p-6 rounded-3xl shadow-lg flex flex-col justify-between">
+                    <div>
+                        <h3 class="font-bold text-gray-800 text-lg border-b border-pastelPink-50 pb-2 mb-4 flex items-center gap-1.5">
+                            <i class="fa-solid fa-wand-magic-sparkles text-pastelPink-400"></i> Cake Styling Panel
+                        </h3>
+
+                        <!-- Cake Frosting Color Select -->
+                        <div class="mb-5">
+                            <span class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Cake Flavour Color</span>
+                            <div class="flex items-center gap-2">
+                                <button onclick="setCakeColor('#FFF')" class="w-8 h-8 rounded-full border border-gray-300 bg-white shadow-sm hover:scale-110 active:scale-95 transition-transform" title="Vanilla"></button>
+                                <button onclick="setCakeColor('#FFA4B4')" class="w-8 h-8 rounded-full bg-pastelPink-300 shadow-sm hover:scale-110 active:scale-95 transition-transform" title="Strawberry"></button>
+                                <button onclick="setCakeColor('#E8D3FF')" class="w-8 h-8 rounded-full bg-indigo-200 shadow-sm hover:scale-110 active:scale-95 transition-transform" title="Lavender Sweet"></button>
+                                <button onclick="setCakeColor('#FFE5D9')" class="w-8 h-8 rounded-full bg-orange-100 shadow-sm hover:scale-110 active:scale-95 transition-transform" title="Peach Cream"></button>
+                                <button onclick="setCakeColor('#8E5431')" class="w-8 h-8 rounded-full bg-amber-800 shadow-sm hover:scale-110 active:scale-95 transition-transform" title="Choco Glaze"></button>
+                            </div>
+                        </div>
+
+                        <!-- Add Toppings Click triggers -->
+                        <div class="mb-5">
+                            <span class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Sprinkles & Glitter</span>
+                            <div class="grid grid-cols-2 gap-2">
+                                <button onclick="spawnGlitter('star')" class="px-3 py-2 bg-pastelPink-50 hover:bg-pastelPink-100 text-pastelPink-600 rounded-xl font-bold text-xs flex items-center justify-center gap-1 transition-all">
+                                    ⭐ Stars
+                                </button>
+                                <button onclick="spawnGlitter('heart')" class="px-3 py-2 bg-pastelPink-50 hover:bg-pastelPink-100 text-pastelPink-600 rounded-xl font-bold text-xs flex items-center justify-center gap-1 transition-all">
+                                    💖 Hearts
+                                </button>
+                                <button onclick="spawnGlitter('dot')" class="px-3 py-2 bg-pastelPink-50 hover:bg-pastelPink-100 text-pastelPink-600 rounded-xl font-bold text-xs flex items-center justify-center gap-1 transition-all">
+                                    🍬 Confetti
+                                </button>
+                                <button onclick="spawnGlitter('berry')" class="px-3 py-2 bg-pastelPink-50 hover:bg-pastelPink-100 text-pastelPink-600 rounded-xl font-bold text-xs flex items-center justify-center gap-1 transition-all">
+                                    🍓 Berries
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Candles Styling -->
+                        <div class="mb-5">
+                            <span class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Birthday Candles</span>
+                            <div class="flex items-center gap-2">
+                                <button onclick="toggleCandle(0)" id="candle-btn-0" class="btn-candle px-3 py-1.5 border border-pastelPink-200 text-pastelPink-500 rounded-full text-xs font-bold bg-pastelPink-50">
+                                    🕯️ Left Candle
+                                </button>
+                                <button onclick="toggleCandle(1)" id="candle-btn-1" class="btn-candle px-3 py-1.5 border border-pastelPink-200 text-pastelPink-500 rounded-full text-xs font-bold bg-pastelPink-50">
+                                    🕯️ Center Candle
+                                </button>
+                                <button onclick="toggleCandle(2)" id="candle-btn-2" class="btn-candle px-3 py-1.5 border border-pastelPink-200 text-pastelPink-500 rounded-full text-xs font-bold bg-pastelPink-50">
+                                    🕯️ Right Candle
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Reset & Actions -->
+                    <div>
+                        <button onclick="clearDecorations()" class="w-full py-2.5 text-xs font-bold text-red-400 border border-red-100 rounded-xl hover:bg-red-50 transition-colors mb-2">
+                            <i class="fa-solid fa-trash mr-1"></i> Clear Decorations
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Right Canvas: Cake Preview & Blow Out Feature -->
+                <div class="lg:col-span-8 bg-white/95 border border-pastelPink-100 p-6 md:p-8 rounded-3xl shadow-lg flex flex-col items-center justify-center min-h-[400px] relative overflow-hidden">
+                    
+                    <!-- Cake Board Layer -->
+                    <div class="relative w-full max-w-[420px] flex flex-col items-center justify-end h-[360px] pb-6">
+                        
+                        <!-- Candlestick Flame Layer -->
+                        <div class="absolute inset-0 pointer-events-none z-30">
+                            <!-- Left Candle & Flame -->
+                            <div id="candle-obj-0" class="absolute hidden flex flex-col items-center transition-all duration-300" style="bottom: 215px; left: 140px;">
+                                <div id="flame-0" class="w-3 h-6 bg-orange-400 rounded-full animate-bounce filter blur-[1px] shadow-[0_0_15px_rgba(249,115,22,0.8)]"></div>
+                                <div class="w-2.5 h-10 bg-gradient-to-t from-pink-400 to-pink-200 rounded-sm"></div>
+                            </div>
+                            
+                            <!-- Middle Candle & Flame -->
+                            <div id="candle-obj-1" class="absolute hidden flex flex-col items-center transition-all duration-300" style="bottom: 215px; left: 205px;">
+                                <div id="flame-1" class="w-3 h-6 bg-orange-400 rounded-full animate-bounce filter blur-[1px] shadow-[0_0_15px_rgba(249,115,22,0.8)]" style="animation-delay: 0.2s"></div>
+                                <div class="w-2.5 h-10 bg-gradient-to-t from-violet-400 to-violet-200 rounded-sm"></div>
+                            </div>
+
+                            <!-- Right Candle & Flame -->
+                            <div id="candle-obj-2" class="absolute hidden flex flex-col items-center transition-all duration-300" style="bottom: 215px; right: 140px;">
+                                <div id="flame-2" class="w-3 h-6 bg-orange-400 rounded-full animate-bounce filter blur-[1px] shadow-[0_0_15px_rgba(249,115,22,0.8)]" style="animation-delay: 0.4s"></div>
+                                <div class="w-2.5 h-10 bg-gradient-to-t from-pink-400 to-pink-200 rounded-sm"></div>
+                            </div>
+                        </div>
+
+                        <!-- Click to decorate canvas style overlay -->
+                        <div id="sprinkle-board" class="absolute inset-0 z-20 overflow-hidden pointer-events-none"></div>
+
+                        <!-- Cake SVG / Visual layers -->
+                        <div class="w-full relative flex flex-col items-center justify-end select-none">
+                            
+                            <!-- Top Tier -->
+                            <div id="cake-tier-top" class="w-48 h-20 rounded-t-3xl border-4 border-b-0 border-white relative z-10 transition-colors duration-500 shadow-md flex items-center justify-center font-pacifico text-white text-lg tracking-wider" style="background-color: #FFA4B4; bottom: -10px;">
+                                <span class="drop-shadow-sm text-pink-100 opacity-90 select-none">Maria</span>
+                                <!-- Dripping Frosting style top -->
+                                <div class="absolute bottom-0 left-0 right-0 h-4 bg-white/30 rounded-full"></div>
+                            </div>
+
+                            <!-- Bottom Tier -->
+                            <div id="cake-tier-bottom" class="w-64 h-28 rounded-t-[2.5rem] border-4 border-white relative transition-colors duration-500 shadow-lg flex items-center justify-center font-pacifico text-white text-2xl tracking-widest" style="background-color: #FFA4B4;">
+                                <span class="drop-shadow-sm text-pink-100 opacity-95 select-none">2026</span>
+                                <!-- Bottom stand wrapper -->
+                                <div class="absolute bottom-0 left-0 right-0 h-4 bg-white/20 rounded-full"></div>
+                            </div>
+
+                            <!-- Ceramic Plate/Stand -->
+                            <div class="w-80 h-4 bg-gradient-to-r from-gray-100 to-white rounded-full border border-gray-200/50 shadow-md relative -bottom-1"></div>
+                        </div>
+                    </div>
+
+                    <!-- Blowing & Interaction Trigger -->
+                    <div class="mt-4 text-center z-30">
+                        <p id="action-hint" class="text-xs font-bold text-pastelPink-400 mb-2 animate-pulse-soft">
+                            💡 Light up the candles in the Left Panel first!
+                        </p>
+                        
+                        <button id="blow-btn" onclick="blowCandles()" disabled class="px-8 py-3.5 bg-gray-200 text-gray-500 font-bold rounded-full shadow-md cursor-not-allowed transition-all duration-300">
+                            Make a Wish & Blow Out! 🌬️
+                        </button>
+                    </div>
+
+                    <!-- Custom Modal for blowout/wish -->
+                    <div id="wish-modal" class="absolute inset-0 bg-white/95 flex flex-col items-center justify-center p-6 text-center transition-all duration-500 translate-y-full opacity-0 z-40">
+                        <div class="animate-bounce text-6xl">💖🧚‍♀️🎉</div>
+                        <h3 class="font-pacifico text-3xl text-pastelPink-500 mt-4">Happy Birthday, Maria!</h3>
+                        <p class="text-gray-600 mt-2 max-w-sm font-medium leading-relaxed">
+                            Your lovely wish has been blown into the magical birthday ether! May all your beautiful, sparkling dreams blossom into reality this year. 🌸
+                        </p>
+                        <button onclick="closeWishModal()" class="mt-6 px-6 py-2.5 bg-pastelPink-500 text-white font-bold rounded-full hover:bg-pastelPink-600 transition-all">
+                            Keep Celebrating! ✨
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Sweet Footer -->
+    <footer class="mt-auto py-6 text-center text-xs md:text-sm text-pastelPink-400 font-bold border-t border-pastelPink-100 bg-white/60">
+        <p class="flex items-center justify-center gap-1.5">
+            Made with 💖 and pixie dust for Maria's special day &copy; 2026
+        </p>
+    </footer>
+
+    <!-- Beautiful Custom Notification Toast System (No standard alerts!) -->
+    <div id="custom-toast" class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-300 max-w-sm w-full bg-white border-2 border-pastelPink-200 rounded-2xl shadow-xl p-4 flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-pastelPink-100 flex items-center justify-center text-xl" id="toast-icon">✨</div>
+        <div>
+            <p class="font-bold text-gray-800 text-xs md:text-sm" id="toast-title">Success!</p>
+            <p class="text-xs text-gray-500" id="toast-message">Everything went perfectly.</p>
+        </div>
+    </div>
+
+    <!-- ================= JAVASCRIPT FOR PAGE INTERACTIVES ================= -->
+    <script>
+        // CUSTOM CELEBRATION CONFETTI ENGINE (Replaces standard library to resolve runtime errors)
+        const canvas = document.getElementById('celebration-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let animationFrameId = null;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class ConfettiParticle {
+            constructor(x, y, color, shape, angleRange = null) {
+                this.x = x;
+                this.y = y;
+                this.size = Math.random() * 8 + 6;
+                this.color = color;
+                this.shape = shape; // 'circle', 'square', 'heart'
+                
+                if (angleRange) {
+                    const angle = (Math.random() * (angleRange[1] - angleRange[0]) + angleRange[0]) * Math.PI / 180;
+                    const velocity = Math.random() * 14 + 10;
+                    this.speedX = Math.cos(angle) * velocity;
+                    this.speedY = Math.sin(angle) * velocity;
+                } else {
+                    this.speedX = (Math.random() - 0.5) * 15;
+                    this.speedY = -Math.random() * 15 - 5;
+                }
+                
+                this.gravity = 0.25;
+                this.opacity = 1;
+                this.rotation = Math.random() * 360;
+                this.rotationSpeed = (Math.random() - 0.5) * 8;
+            }
+            
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.speedY += this.gravity;
+                this.speedX *= 0.98; // Drag reduction
+                this.rotation += this.rotationSpeed;
+                this.opacity -= 0.01;
+            }
+            
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate((this.rotation * Math.PI) / 180);
+                ctx.globalAlpha = Math.max(0, this.opacity);
+                ctx.fillStyle = this.color;
+                
+                if (this.shape === 'circle') {
+                    ctx.beginPath();
+                    ctx.arc(0, 0, this.size / 2, 0, Math.PI * 2);
+                    ctx.fill();
+                } else if (this.shape === 'heart') {
+                    ctx.beginPath();
+                    const d = this.size;
+                    // Draw clean procedural vector heart
+                    ctx.moveTo(0, d / 4);
+                    ctx.quadraticCurveTo(0, 0, d / 4, 0);
+                    ctx.quadraticCurveTo(d / 2, 0, d / 2, d / 4);
+                    ctx.quadraticCurveTo(d / 2, 0, (3 * d) / 4, 0);
+                    ctx.quadraticCurveTo(d, 0, d, d / 4);
+                    ctx.quadraticCurveTo(d, d / 2, (3 * d) / 4, (3 * d) / 4);
+                    ctx.lineTo(d / 2, d);
+                    ctx.lineTo(d / 4, (3 * d) / 4);
+                    ctx.quadraticCurveTo(0, d / 2, 0, d / 4);
+                    ctx.closePath();
+                    ctx.fill();
+                } else {
+                    ctx.fillRect(-this.size / 2, -this.size / 2, this.size, this.size);
+                }
+                ctx.restore();
+            }
+        }
+
+        function triggerConfetti(originX, originY, particleCount = 100, angleRange = null) {
+            const colors = ['#FF69B4', '#FFB6C1', '#FFF0F5', '#E8D3FF', '#FFE5D9', '#FF476C'];
+            const shapes = ['circle', 'square', 'heart'];
+            
+            for (let i = 0; i < particleCount; i++) {
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                const shape = shapes[Math.floor(Math.random() * shapes.length)];
+                particles.push(new ConfettiParticle(originX, originY, color, shape, angleRange));
+            }
+            
+            if (!animationFrameId) {
+                animateConfetti();
+            }
+        }
+
+        function animateConfetti() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            particles = particles.filter(p => p.opacity > 0 && p.y < canvas.height);
+            
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            
+            if (particles.length > 0) {
+                animationFrameId = requestAnimationFrame(animateConfetti);
+            } else {
+                animationFrameId = null;
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+        }
+
+        // SPARKLY MOUSE CURSOR TRAIL
+        const sparkleContainer = document.getElementById('sparkle-container');
+        document.addEventListener('mousemove', (e) => {
+            if (Math.random() > 0.85) { // Control spacing of particles
+                const sparkle = document.createElement('div');
+                sparkle.classList.add('sparkle-particle');
+                
+                // Randomize sizing
+                const size = Math.random() * 8 + 4;
+                sparkle.style.width = `${size}px`;
+                sparkle.style.height = `${size}px`;
+                
+                sparkle.style.left = `${e.clientX}px`;
+                sparkle.style.top = `${e.clientY}px`;
+                
+                // Random color palette (pinkish pastel tones)
+                const colors = ['#FFCCD5', '#FFA4B4', '#FF708B', '#E8D3FF', '#FFE5D9', '#FFF'];
+                sparkle.style.background = colors[Math.floor(Math.random() * colors.length)];
+                
+                sparkleContainer.appendChild(sparkle);
+                
+                setTimeout(() => {
+                    sparkle.remove();
+                }, 800);
+            }
+        });
+
+        // PAGE ROUTING/SWITCHING LOGIC
+        function showPage(pageName) {
+            // Hide all pages
+            const pages = document.querySelectorAll('.page-content');
+            pages.forEach(p => p.classList.add('hidden'));
+
+            // Show active page
+            document.getElementById(`page-${pageName}`).classList.remove('hidden');
+
+            // Handle navigation button active status
+            const navBtns = document.querySelectorAll('.nav-btn');
+            navBtns.forEach(btn => {
+                btn.classList.remove('bg-pastelPink-400', 'text-white', 'shadow-md', 'shadow-pastelPink-200');
+                btn.classList.add('text-pastelPink-500', 'hover:bg-pastelPink-50');
+            });
+
+            const activeBtn = document.getElementById(`nav-${pageName}`);
+            activeBtn.classList.add('bg-pastelPink-400', 'text-white', 'shadow-md', 'shadow-pastelPink-200');
+            activeBtn.classList.remove('text-pastelPink-500', 'hover:bg-pastelPink-50');
+
+            // Trigger custom notifications based on screen
+            if (pageName === 'mailbox') {
+                showToast('💌 Sweet Postbox', 'Enjoy these interactive letters from across the screen!', '💖');
+            } else if (pageName === 'cake') {
+                showToast('🎂 Cake Design Mode', 'Bake and decorate a gorgeous birthday cake!', '🧁');
+                refreshCakeLayout();
+            }
+        }
+
+        // CUSTOM NOTIFICATION TOAST
+        function showToast(title, msg, icon) {
+            const toast = document.getElementById('custom-toast');
+            document.getElementById('toast-title').innerText = title;
+            document.getElementById('toast-message').innerText = msg;
+            document.getElementById('toast-icon').innerText = icon;
+
+            toast.classList.remove('translate-y-24', 'opacity-0');
+            
+            setTimeout(() => {
+                toast.classList.add('translate-y-24', 'opacity-0');
+            }, 3500);
+        }
+
+        // PAGE 1: CARD Logic
+        function toggleCard() {
+            const card = document.getElementById('birthday-card');
+            card.classList.toggle('is-open');
+
+            if (card.classList.contains('is-open')) {
+                // Burst custom local pink & purple celebration confetti from center
+                triggerConfetti(window.innerWidth / 2, window.innerHeight * 0.6, 120);
+                showToast("💝 Card Opened!", "Hope you love this special birthday message!", "✨");
+            }
+        }
+
+        // SYNTH MUSIC LOGIC (Plays chime cover using Web Audio API)
+        let audioCtx = null;
+        let melodyInterval = null;
+        let isPlaying = false;
+
+        const notes = [
+            { note: "C4", dur: 350 }, { note: "C4", dur: 150 },
+            { note: "D4", dur: 500 }, { note: "C4", dur: 500 },
+            { note: "F4", dur: 500 }, { note: "E4", dur: 1000 },
+            
+            { note: "C4", dur: 350 }, { note: "C4", dur: 150 },
+            { note: "D4", dur: 500 }, { note: "C4", dur: 500 },
+            { note: "G4", dur: 500 }, { note: "F4", dur: 1000 },
+
+            { note: "C4", dur: 350 }, { note: "C4", dur: 150 },
+            { note: "C5", dur: 500 }, { note: "A4", dur: 500 },
+            { note: "F4", dur: 500 }, { note: "E4", dur: 500 },
+            { note: "D4", dur: 1000 },
+
+            { note: "A#4", dur: 350 }, { note: "A#4", dur: 150 },
+            { note: "A4", dur: 500 }, { note: "F4", dur: 500 },
+            { note: "G4", dur: 500 }, { note: "F4", dur: 1000 }
+        ];
+
+        const noteFreqs = {
+            "C4": 261.63, "D4": 293.66, "E4": 329.63, "F4": 349.23,
+            "G4": 392.00, "A4": 440.00, "A#4": 466.16, "C5": 523.25
+        };
+
+        function toggleChimeMelody() {
+            if (isPlaying) {
+                stopChimeMelody();
+                return;
+            }
+
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            
+            isPlaying = true;
+            document.getElementById('music-icon').className = 'fa-solid fa-stop';
+            document.getElementById('music-status').innerText = 'Playing Birthday Chimes... ✨';
+            
+            let noteIdx = 0;
+            
+            function playNextNote() {
+                if (!isPlaying) return;
+                
+                const current = notes[noteIdx];
+                playTone(noteFreqs[current.note], current.dur);
+
+                noteIdx = (noteIdx + 1) % notes.length;
+                melodyInterval = setTimeout(playNextNote, current.dur + 100);
+            }
+
+            playNextNote();
+        }
+
+        function stopChimeMelody() {
+            isPlaying = false;
+            if (melodyInterval) clearTimeout(melodyInterval);
+            document.getElementById('music-icon').className = 'fa-solid fa-play';
+            document.getElementById('music-status').innerText = 'Chime Player stopped.';
+        }
+
+        function playTone(freq, dur) {
+            if (!audioCtx) return;
+            
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            
+            osc.type = 'triangle'; 
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            
+            gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+            gainNode.gain.linearRampToValueAtTime(0.15, audioCtx.currentTime + 0.05);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + (dur / 1000) - 0.05);
+
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            
+            osc.start();
+            osc.stop(audioCtx.currentTime + (dur / 1000));
+        }
+
+        // PAGE 2: VIRTUAL MAILBOX INTERACTION LOGIC
+        function openLetter(id) {
+            const letterModal = document.getElementById(`letter-modal-${id}`);
+            letterModal.classList.remove('hidden');
+            if (audioCtx) {
+                playTone(523.25, 150);
+                setTimeout(() => playTone(659.25, 150), 100);
+            }
+        }
+
+        function closeLetter(id) {
+            const letterModal = document.getElementById(`letter-modal-${id}`);
+            letterModal.classList.add('hidden');
+        }
+
+        // COMPLIMENT LIST
+        const compliments = [
+            "You are absolutely, undoubtedly the cutest person on my friends list! 🥰",
+            "Every text from you puts the biggest, silliest smile on my face! 📱💞",
+            "Even though we connect online, your warmth feels like a real sunshine hug. ☀️",
+            "Your laugh is infectious, even through text bubble messages! 💬💖",
+            "The world is a sparklier, sweeter place just because you exist, Maria!",
+            "If being incredibly lovable was a crime, you would be serving a life sentence! 🕵️‍♀️💗",
+            "Talking to you is easily the best part of my entire day! ✨🌱",
+            "You have the most beautiful soul, and your positive energy is magical! 🦄",
+            "Distance is just a number when a connection is this cute and special! 🗺️💖"
+        ];
+
+        function generateCuteCompliment() {
+            const complimentBox = document.getElementById('compliment-text');
+            const randomIdx = Math.floor(Math.random() * compliments.length);
+            
+            // Apply a sweet transition effect
+            complimentBox.style.opacity = 0;
+            setTimeout(() => {
+                complimentBox.innerText = `"${compliments[randomIdx]}"`;
+                complimentBox.style.opacity = 1;
+                
+                // Blast customized micro-heart confetti bursts
+                triggerConfetti(window.innerWidth / 2, window.innerHeight * 0.7, 30);
+
+                // Play magical chime tone
+                if (audioCtx) {
+                    playTone(659.25, 100);
+                    setTimeout(() => playTone(783.99, 100), 100);
+                    setTimeout(() => playTone(1046.50, 200), 200);
+                }
+            }, 250);
+        }
+
+        // PAGE 3: INTERACTIVE CAKE BUILDER Logic
+        let activeCandles = [false, false, false];
+        let cakeColor = "#FFA4B4";
+
+        function setCakeColor(color) {
+            cakeColor = color;
+            document.getElementById('cake-tier-top').style.backgroundColor = color;
+            document.getElementById('cake-tier-bottom').style.backgroundColor = color;
+            showToast("🎨 Layer Frosting Changed", "Ooh, that looks delicious!", "🍰");
+        }
+
+        function toggleCandle(idx) {
+            activeCandles[idx] = !activeCandles[idx];
+            
+            const btn = document.getElementById(`candle-btn-${idx}`);
+            const candleObj = document.getElementById(`candle-obj-${idx}`);
+
+            if (activeCandles[idx]) {
+                btn.classList.remove('bg-pastelPink-50', 'text-pastelPink-500');
+                btn.classList.add('bg-pastelPink-500', 'text-white');
+                candleObj.classList.remove('hidden');
+                if (audioCtx) playTone(523.25, 120);
+            } else {
+                btn.classList.remove('bg-pastelPink-500', 'text-white');
+                btn.classList.add('bg-pastelPink-50', 'text-pastelPink-500');
+                candleObj.classList.add('hidden');
+            }
+
+            refreshBlowButtonState();
+        }
+
+        function refreshBlowButtonState() {
+            const hasCandlesLit = activeCandles.some(c => c === true);
+            const blowBtn = document.getElementById('blow-btn');
+            const actionHint = document.getElementById('action-hint');
+
+            if (hasCandlesLit) {
+                blowBtn.disabled = false;
+                blowBtn.classList.remove('bg-gray-200', 'text-gray-500', 'cursor-not-allowed');
+                blowBtn.classList.add('bg-pastelPink-500', 'text-white', 'hover:bg-pastelPink-600', 'animate-bounce');
+                actionHint.innerText = "⭐ Yay! Tell Maria to close her eyes, make a wish, and blow!";
+            } else {
+                blowBtn.disabled = true;
+                blowBtn.classList.remove('bg-pastelPink-500', 'text-white', 'hover:bg-pastelPink-600', 'animate-bounce');
+                blowBtn.classList.add('bg-gray-200', 'text-gray-500', 'cursor-not-allowed');
+                actionHint.innerText = "🕯️ Light up the candles in the Left Panel first!";
+            }
+        }
+
+        // Spawn glitter sprinkles randomly on the cake layer area
+        // Limits positions so they fall nicely on the top or bottom cake tier boundaries
+        function spawnGlitter(type) {
+            const board = document.getElementById('sprinkle-board');
+            const isTopTier = Math.random() > 0.4;
+            let leftX, topY;
+
+            const el = document.createElement('div');
+            el.className = 'absolute z-30 pointer-events-auto cursor-pointer select-none text-base transition-transform hover:scale-125';
+
+            if (isTopTier) {
+                leftX = Math.random() * 140 + 130; 
+                topY = Math.random() * 50 + 110; 
+            } else {
+                leftX = Math.random() * 210 + 100;
+                topY = Math.random() * 60 + 190;
+            }
+
+            el.style.left = `${leftX}px`;
+            el.style.top = `${topY}px`;
+
+            if (type === 'star') {
+                el.innerText = '⭐️';
+            } else if (type === 'heart') {
+                el.innerText = '💖';
+            } else if (type === 'dot') {
+                el.innerText = '✨';
+            } else {
+                el.innerText = '🍓';
+            }
+
+            el.onclick = function() {
+                el.remove();
+                if (audioCtx) playTone(293.66, 80);
+            };
+
+            board.appendChild(el);
+            if (audioCtx) playTone(440.00, 100);
+        }
+
+        function clearDecorations() {
+            document.getElementById('sprinkle-board').innerHTML = '';
+            showToast("🗑️ Cleaned Cake", "Cleared all sprinkles, ready for new styles!", "🧹");
+        }
+
+        function blowCandles() {
+            // Extinguish flames
+            for (let i = 0; i < 3; i++) {
+                const flame = document.getElementById(`flame-${i}`);
+                if (flame) {
+                    flame.classList.add('hidden');
+                }
+            }
+
+            // Launch beautiful customized side confetti cannons inwards!
+            // Left cannon shooting up-right
+            triggerConfetti(0, window.innerHeight * 0.8, 60, [-60, -20]);
+            // Right cannon shooting up-left
+            triggerConfetti(window.innerWidth, window.innerHeight * 0.8, 60, [-160, -120]);
+            
+            // Center secondary celebration spray
+            setTimeout(() => {
+                triggerConfetti(window.innerWidth / 2, window.innerHeight * 0.6, 80);
+            }, 300);
+
+            setTimeout(() => {
+                const modal = document.getElementById('wish-modal');
+                modal.classList.remove('translate-y-full', 'opacity-0');
+                modal.classList.add('translate-y-0', 'opacity-100');
+                
+                if (audioCtx) {
+                    setTimeout(() => playTone(523.25, 150), 0);
+                    setTimeout(() => playTone(659.25, 150), 150);
+                    setTimeout(() => playTone(783.99, 300), 300);
+                    setTimeout(() => playTone(1046.50, 600), 600);
+                }
+            }, 800);
+        }
+
+        function closeWishModal() {
+            const modal = document.getElementById('wish-modal');
+            modal.classList.remove('translate-y-0', 'opacity-100');
+            modal.classList.add('translate-y-full', 'opacity-0');
+
+            activeCandles = [false, false, false];
+            for (let i = 0; i < 3; i++) {
+                const btn = document.getElementById(`candle-btn-${i}`);
+                const candleObj = document.getElementById(`candle-obj-${i}`);
+                const flame = document.getElementById(`flame-${i}`);
+                
+                btn.classList.remove('bg-pastelPink-500', 'text-white');
+                btn.classList.add('bg-pastelPink-50', 'text-pastelPink-500');
+                candleObj.classList.add('hidden');
+                if (flame) flame.classList.remove('hidden');
+            }
+            refreshBlowButtonState();
+        }
+
+        function refreshCakeLayout() {
+            const board = document.getElementById('sprinkle-board');
+            if (board.children.length === 0) {
+                setTimeout(() => spawnGlitter('star'), 100);
+                setTimeout(() => spawnGlitter('heart'), 200);
+                setTimeout(() => spawnGlitter('berry'), 300);
+                setTimeout(() => spawnGlitter('dot'), 400);
+                setTimeout(() => spawnGlitter('star'), 500);
+                setTimeout(() => spawnGlitter('heart'), 600);
+            }
+        }
+
+        window.onload = function() {
+            // Smooth entrance confetti sequence
+            setTimeout(() => {
+                triggerConfetti(window.innerWidth / 2, window.innerHeight * 0.3, 100);
+            }, 500);
+            
+            showToast("💖 Happy Birthday Maria!", "Welcome to your virtual birthday spot!", "🌸");
+        };
+    </script>
+</body>
+</html>
+
+```
